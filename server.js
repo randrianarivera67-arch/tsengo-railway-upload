@@ -67,6 +67,12 @@ app.get('/media', async (req, res) => {
   r.body.pipe(res);
 });
 
-app.get('/health', (req, res) => res.json({ ok: true }));
+app.get('/health', (req, res) => res.json({ ok: true, chunks: Object.keys(chunks).length }));
+
+// Tsy mametraka variable vaovao rehefa misy upload ongoing
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, waiting for uploads...');
+  setTimeout(() => process.exit(0), 30000);
+});
 
 app.listen(process.env.PORT || 3000, () => console.log('Railway upload server running'));
